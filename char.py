@@ -18,12 +18,21 @@ class python_game_characters():
         self.character_movements_animation()
         self.game_setup()
 
+    def extra_descriptors(self):
+        self.font = pygame.font.SysFont('comicsans', 30, True)
+        player_text = self.font.render("Player 1",1,(0,0,255))
+        health_text = self.font.render("Health:-",1,(255,255,255))
+        self.win.blit(player_text, (20,600))
+        self.win.blit(health_text, (20,640))
+        pygame.draw.rect(self.win, (0,255,0), (20,680,self.health,20))
+
+
     def game_lost(self):
         self.points=0
 
     def fire_collision(self):
         if self.health > 0:
-            self.health -= 0.5
+            self.health -= 1
             print(self.health)
         
 
@@ -100,6 +109,7 @@ class python_game_characters():
     
     def character_drawing(self):
         self.win.fill((0,0,0))
+        self.extra_descriptors()
         self.surroundings()
         self.render_obstacles()
         if self.walkcount+1 > 30:  self.walkcount=0
