@@ -24,7 +24,8 @@ class python_game_characters():
         health_text = self.font.render("Health:-",1,(255,255,255))
         self.win.blit(player_text, (20,600))
         self.win.blit(health_text, (20,640))
-        pygame.draw.rect(self.win, (0,255,0), (20,680,self.health,20))
+        pygame.draw.rect(self.win, (0,255,0), (20,675,self.health,15))
+        pygame.draw.rect(self.win, (255,255,0), (20,675,100,15),2)
 
 
     def game_lost(self):
