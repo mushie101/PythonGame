@@ -16,6 +16,9 @@ class python_game_characters():
         self.character_movements_animation()
         self.game_setup()
 
+    # def collision_function(self):
+    #     a
+
     def move_boat(self):
         boat_velocity = 2.5
         river_count=0
@@ -98,11 +101,6 @@ class python_game_characters():
         for i in range(6):
             self.run_left.append(pygame.transform.flip(self.run_right[i], True, False))
 # ---------------------------------------------Python Game environment------------------------------------------------
-# class python_game_environment():
-#     def __init__(self):
-#         self.screen_width = 750
-#         self.screen_height = 750
-        # self.river_image=
 # ---------------------------------------------Driver Function------------------------------------------------
 
 def main():
