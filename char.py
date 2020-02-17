@@ -1,7 +1,9 @@
 import pygame
 
 class python_game_characters():
-    def __init__(self, x=360, y=512):
+    def __init__(self, x=392, y=512):
+        self.health=100
+        self.points=0
         self.screen_width = 750
         self.screen_height = 750
         self.boat=[[True, 0],[True, 187.5],[True, 375],[True, 562.5]]
@@ -16,8 +18,31 @@ class python_game_characters():
         self.character_movements_animation()
         self.game_setup()
 
-    # def collision_function(self):
-    #     a
+    def game_lost(self):
+        self.points=0
+
+    def fire_collision(self):
+        if self.health > 0:
+            self.health -= 0.5
+            print(self.health)
+        
+
+    def check_collision(self):
+        bridge_counter=0
+        river_counter=0
+        for i in range(5):
+            for j in range(5):
+                if river_counter%2==0:
+                    if (self.x-((j*150))<=62 and self.x-((j*150))>=-30) and ((self.y-((2*i)*64))<=62 and (self.y-((2*i)*64))>=-30):
+                        self.fire_collision()
+                else:
+                    if (self.x-((j*150)+64)<=62 and self.x-((j*150)+64)>=-30) and ((self.y-((2*i)*64))<=62 and (self.y-((2*i)*64))>=-30):
+                        self.fire_collision()
+            river_counter+=1
+                        
+
+            # else:
+                # self.move_boat()
 
     def move_boat(self):
         boat_velocity = 2.5
@@ -43,9 +68,9 @@ class python_game_characters():
             if i % 2 == 0:
                 for j in range(5):
                     if bridge_counter%2 == 0:
-                        pygame.draw.rect(self.win, (255,0,0), [(j*150)+16,(i*64)+16,32,32])
+                        pygame.draw.rect(self.win, (255,0,0), [(j*150),(i*64),64,64])
                     else:
-                        pygame.draw.rect(self.win, (255,0,0), [(j*150)+80,(i*64)+16,32,32])
+                        pygame.draw.rect(self.win, (255,0,0), [(j*150)+64,(i*64),64,64])
                 bridge_counter+=1
             else:
                 self.move_boat()
@@ -81,6 +106,7 @@ class python_game_characters():
         if self.isWalk == True and self.left==False:    self.win.blit(self.run_right[self.walkcount//5], (self.x,self.y))
         elif self.left==True:    self.win.blit(self.run_left[self.walkcount//5], (self.x,self.y))
         else:   self.win.blit(self.idle[self.idle_count//5], (self.x, self.y))
+        self.check_collision()
         pygame.display.update()
     
     def user_movement_input(self):
@@ -90,7 +116,7 @@ class python_game_characters():
         if keys[pygame.K_LEFT] and self.x > self.velocity:                                                 self.x-=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=True
         elif keys[pygame.K_RIGHT] and self.x < self.screen_width-self.width-self.velocity:                 self.x+=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=False
         elif keys[pygame.K_UP] and self.y > self.velocity:                                                 self.y-=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
-        elif keys[pygame.K_DOWN] and self.y < self.screen_height*0.8-1.25*self.height:                                      self.y+=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
+        elif keys[pygame.K_DOWN] and self.y < self.screen_height*0.8-0.75*self.height:                                      self.y+=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
         else:                                                                                              self.walkcount=0; self.isWalk=False; self.idle_count+=1
         self.character_drawing()
 
