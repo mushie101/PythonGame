@@ -22,9 +22,13 @@ class python_game_characters():
 
     def game_end_handler(self):
         self.end = True
-        pygame.time.delay(1000)
         self.win.blit(self.reset_text, (300, 635))
         pygame.display.update()
+        keys=pygame.key.get_pressed()
+        if keys[pygame.K_r]:
+            main()
+        elif keys[pygame.K_q]:
+            pygame.quit()
 
     def extra_descriptors(self):
         self.font_ = pygame.font.SysFont('comicsans', 30, True, True)
@@ -39,11 +43,10 @@ class python_game_characters():
         pygame.draw.rect(self.win, (255,255,0), (20,675,100,15),2)
 
     def win_check(self):
-        if self.y < 64:
-            self.points=self.health*69
-            self.win.blit(self.win_text, (300,600))
-            pygame.display.update()
-            self.game_end_handler()
+        self.points=self.health*69
+        self.win.blit(self.win_text, (300,600))
+        pygame.display.update()
+        self.game_end_handler()
 
     def game_lost(self):
         self.points=0
@@ -75,6 +78,8 @@ class python_game_characters():
                 river_counter+=1
         if self.health == 0:
             self.game_lost()
+        if self.y <= 32:
+            self.win_check()
 
     def move_boat(self):
         boat_velocity = 2.5
