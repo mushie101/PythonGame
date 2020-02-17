@@ -19,17 +19,30 @@ class python_game_characters():
         self.game_setup()
 
     def extra_descriptors(self):
-        self.font = pygame.font.SysFont('comicsans', 30, True)
-        player_text = self.font.render("Player 1",1,(0,0,255))
-        health_text = self.font.render("Health:-",1,(255,255,255))
+        self.font_ = pygame.font.SysFont('comicsans', 30, True, True)
+        player_text = self.font_.render("Player 1",1,(0,0,255))
+        health_text = self.font_.render("Health:-",1,(255,255,255))
+        self.lose_text=self.font_.render('You Have Lost!!!',1,(255,0,255))
+        self.win_text=self.font_.render('You Have Won!!!',1,(255,0,255))
         self.win.blit(player_text, (20,600))
         self.win.blit(health_text, (20,640))
         pygame.draw.rect(self.win, (0,255,0), (20,675,self.health,15))
         pygame.draw.rect(self.win, (255,255,0), (20,675,100,15),2)
 
+    def win_check(self):
+        if self.y < 64:
+            self.points=self.health*69
+            self.win.blit(self.win_text, (300,600))
+            pygame.time.delay(1000)
+            # self.__init__()
 
     def game_lost(self):
         self.points=0
+        self.win.blit(self.lose_text, (300,600))
+        pygame.time.delay(1000)
+        # self.__init__()
+
+
 
     def fire_collision(self):
         if self.health > 0:
@@ -54,6 +67,8 @@ class python_game_characters():
                 if ((self.x-self.boat[river_counter][1]<=62 and self.x-self.boat[river_counter][1]>=-30)and(self.y-i*64<=62 and self.y-i*64>=-30)):
                     self.health=0
                 river_counter+=1
+        if self.health == 0:
+            self.game_lost()
 
     def move_boat(self):
         boat_velocity = 2.5
@@ -128,7 +143,7 @@ class python_game_characters():
         if keys[pygame.K_LEFT] and self.x > self.velocity:                                                 self.x-=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=True
         elif keys[pygame.K_RIGHT] and self.x < self.screen_width-self.width-self.velocity:                 self.x+=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=False
         elif keys[pygame.K_UP] and self.y > self.velocity:                                                 self.y-=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
-        elif keys[pygame.K_DOWN] and self.y < self.screen_height*0.8-0.75*self.height:                                      self.y+=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
+        elif keys[pygame.K_DOWN] and self.y < self.screen_height*0.8-0.75*self.height:                     self.y+=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
         else:                                                                                              self.walkcount=0; self.isWalk=False; self.idle_count+=1
         self.character_drawing()
 
