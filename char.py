@@ -20,8 +20,12 @@ class python_game_characters():
         self.character_movements_animation()
         self.game_setup()
 
+    def display_points(self):
+        self.win.blit(self.points_text, (20,720))
+
     def game_end_handler(self):
         self.end = True
+        self.display_points()
         self.win.blit(self.reset_text, (300, 635))
         pygame.display.update()
         keys=pygame.key.get_pressed()
@@ -37,6 +41,7 @@ class python_game_characters():
         self.lose_text=self.font_.render('You Have Lost!!!',1,(255,0,255))
         self.win_text=self.font_.render('You Have Won!!!',1,(255,0,255))
         self.reset_text=self.font_.render('Press R to Play again and Q to quit',1,(255,0,0))
+        self.points_text=self.font_.render(('Points:-{0}'.format(self.points)),1,(255,255,0))
         self.win.blit(player_text, (20,600))
         self.win.blit(health_text, (20,640))
         pygame.draw.rect(self.win, (0,255,0), (20,675,self.health,15))
