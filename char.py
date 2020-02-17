@@ -30,19 +30,20 @@ class python_game_characters():
     def check_collision(self):
         bridge_counter=0
         river_counter=0
-        for i in range(5):
-            for j in range(5):
-                if river_counter%2==0:
-                    if (self.x-((j*150))<=62 and self.x-((j*150))>=-30) and ((self.y-((2*i)*64))<=62 and (self.y-((2*i)*64))>=-30):
-                        self.fire_collision()
-                else:
-                    if (self.x-((j*150)+64)<=62 and self.x-((j*150)+64)>=-30) and ((self.y-((2*i)*64))<=62 and (self.y-((2*i)*64))>=-30):
-                        self.fire_collision()
-            river_counter+=1
-                        
-
-            # else:
-                # self.move_boat()
+        for i in range(9):
+            if i%2 == 0:
+                for j in range(5):
+                    if bridge_counter%2==0:
+                        if (self.x-((j*150))<=62 and self.x-((j*150))>=-30) and ((self.y-((i)*64))<=62 and (self.y-((i)*64))>=-30):
+                            self.fire_collision()
+                    else:
+                        if (self.x-((j*150)+64)<=62 and self.x-((j*150)+64)>=-30) and ((self.y-((i)*64))<=62 and (self.y-((i)*64))>=-30):
+                            self.fire_collision()
+                bridge_counter+=1
+            else:
+                if ((self.x-self.boat[river_counter][1]<=62 and self.x-self.boat[river_counter][1]>=-30)and(self.y-i*64<=62 and self.y-i*64>=-30)):
+                    print("health")
+                river_counter+=1
 
     def move_boat(self):
         boat_velocity = 2.5
