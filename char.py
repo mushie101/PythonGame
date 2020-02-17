@@ -21,6 +21,8 @@ class python_game_characters():
         self.game_setup()
 
     def game_end_handler(self):
+        self.end = True
+        pygame.time.delay(1000)
         self.win.blit(self.reset_text, (300, 635))
         pygame.display.update()
 
@@ -117,6 +119,7 @@ class python_game_characters():
                     self.win.blit((pygame.transform.rotate(pygame.image.load('./sprites/bridge.png'),90)),(self.bridge_width*i,(self.bridge_height*j)))
 
     def game_setup(self):
+        self.end = False
         self.player_index=1
         pygame.init()
         self.win=pygame.display.set_mode((self.screen_width,self.screen_height))
@@ -145,11 +148,12 @@ class python_game_characters():
         keys=pygame.key.get_pressed()
         self.walkcout=0
         self.idle_count=0
-        if keys[pygame.K_LEFT] and self.x > self.velocity:                                                 self.x-=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=True
-        elif keys[pygame.K_RIGHT] and self.x < self.screen_width-self.width-self.velocity:                 self.x+=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=False
-        elif keys[pygame.K_UP] and self.y > self.velocity:                                                 self.y-=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
-        elif keys[pygame.K_DOWN] and self.y < self.screen_height*0.8-0.75*self.height:                     self.y+=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
-        else:                                                                                              self.walkcount=0; self.isWalk=False; self.idle_count+=1
+        if self.end == False:
+            if keys[pygame.K_LEFT] and self.x > self.velocity:                                                 self.x-=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=True
+            elif keys[pygame.K_RIGHT] and self.x < self.screen_width-self.width-self.velocity:                 self.x+=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=False
+            elif keys[pygame.K_UP] and self.y > self.velocity:                                                 self.y-=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
+            elif keys[pygame.K_DOWN] and self.y < self.screen_height*0.8-0.75*self.height:                     self.y+=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
+            else:                                                                                              self.walkcount=0; self.isWalk=False; self.idle_count+=1
         self.character_drawing()
 
     def character_movements_animation(self):
