@@ -52,7 +52,7 @@ class python_game_characters():
                 bridge_counter+=1
             else:
                 if ((self.x-self.boat[river_counter][1]<=62 and self.x-self.boat[river_counter][1]>=-30)and(self.y-i*64<=62 and self.y-i*64>=-30)):
-                    print("health")
+                    self.health=0
                 river_counter+=1
 
     def move_boat(self):
