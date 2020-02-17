@@ -1,7 +1,9 @@
 import pygame
 
 class python_game_characters():
-    def __init__(self, x=392, y=512):
+    def __init__(self, x=392, y=512, num=1):
+        self.single_player=True
+        self.player_number=num
         self.health=100
         self.points=0
         self.screen_width = 750
@@ -11,19 +13,24 @@ class python_game_characters():
         self.height=80
         self.x=x
         self.y=y
-        self.velocity=2
+        self.velocity=4
         self.run=True
         self.isWalk=False
         self.left=False
         self.character_movements_animation()
         self.game_setup()
 
+    def game_end_handler(self):
+        self.win.blit(self.reset_text, (300, 635))
+        pygame.display.update()
+
     def extra_descriptors(self):
         self.font_ = pygame.font.SysFont('comicsans', 30, True, True)
-        player_text = self.font_.render("Player 1",1,(0,0,255))
+        player_text = self.font_.render(("Player {0}".format(self.player_index)),1,(0,0,255))
         health_text = self.font_.render("Health:-",1,(255,255,255))
         self.lose_text=self.font_.render('You Have Lost!!!',1,(255,0,255))
         self.win_text=self.font_.render('You Have Won!!!',1,(255,0,255))
+        self.reset_text=self.font_.render('Press R to Play again and Q to quit',1,(255,0,0))
         self.win.blit(player_text, (20,600))
         self.win.blit(health_text, (20,640))
         pygame.draw.rect(self.win, (0,255,0), (20,675,self.health,15))
@@ -33,21 +40,18 @@ class python_game_characters():
         if self.y < 64:
             self.points=self.health*69
             self.win.blit(self.win_text, (300,600))
-            pygame.time.delay(1000)
-            # self.__init__()
+            pygame.display.update()
+            self.game_end_handler()
 
     def game_lost(self):
         self.points=0
         self.win.blit(self.lose_text, (300,600))
-        pygame.time.delay(1000)
-        # self.__init__()
-
-
+        pygame.display.update()
+        self.game_end_handler()
 
     def fire_collision(self):
         if self.health > 0:
             self.health -= 1
-            print(self.health)
         
 
     def check_collision(self):
@@ -113,6 +117,7 @@ class python_game_characters():
                     self.win.blit((pygame.transform.rotate(pygame.image.load('./sprites/bridge.png'),90)),(self.bridge_width*i,(self.bridge_height*j)))
 
     def game_setup(self):
+        self.player_index=1
         pygame.init()
         self.win=pygame.display.set_mode((self.screen_width,self.screen_height))
         pygame.display.set_caption("River cross 1 v 1")
@@ -157,7 +162,9 @@ class python_game_characters():
 # ---------------------------------------------Driver Function------------------------------------------------
 
 def main():
+    
     ob=python_game_characters()
+    ob.game_setup()
 
 if __name__ == '__main__':
     main()
