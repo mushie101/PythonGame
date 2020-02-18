@@ -57,7 +57,7 @@ class python_game_characters():
         pygame.draw.rect(self.win, (255,255,0), (20,675,100,15),2)
 
     def win_check(self):
-        self.points=self.health*69-((self.seconds*6.9)//1)
+        self.points=self.health*420-((self.seconds*69)//1)
         self.win.blit(self.win_text, (300,600))
         pygame.display.update()
         self.game_end_handler()
