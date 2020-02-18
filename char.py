@@ -1,8 +1,10 @@
+
 import pygame
 
 class python_game_characters():
-    def __init__(self, x=392, y=512, num=1):
+    def __init__(self, num=1):
         self.single_player=True
+        self.start_time=pygame.time.get_ticks()
         self.player_number=num
         self.health=100
         self.points=0
@@ -11,8 +13,8 @@ class python_game_characters():
         self.boat=[[True, 0],[True, 187.5],[True, 375],[True, 562.5]]
         self.width=58
         self.height=80
-        self.x=x
-        self.y=y
+        self.x=392
+        self.y=512
         self.velocity=4
         self.run=True
         self.isWalk=False
@@ -26,7 +28,7 @@ class python_game_characters():
     def game_end_handler(self):
         self.end = True
         self.display_points()
-        self.win.blit(self.reset_text, (300, 635))
+        self.win.blit(self.reset_text, (200, 700))
         pygame.display.update()
         keys=pygame.key.get_pressed()
         if keys[pygame.K_r]:
@@ -67,6 +69,9 @@ class python_game_characters():
     def check_collision(self):
         bridge_counter=0
         river_counter=0
+        seconds=(pygame.time.get_ticks()-self.start_time)/1000
+        self.timer_text=self.font_.render('Timer:-{0}'.format(seconds//1),1,(255,255,255))
+        self.win.blit(self.timer_text,(600,600))
         for i in range(9):
             if i%2 == 0:
                 for j in range(5):
@@ -144,6 +149,9 @@ class python_game_characters():
     def character_drawing(self):
         self.win.fill((0,0,0))
         self.extra_descriptors()
+        # self.timer-=1
+        # self.win.blit(self.timer_text,(600,600))
+        # pygame.display.update()
         self.surroundings()
         self.render_obstacles()
         if self.walkcount+1 > 30:  self.walkcount=0
