@@ -27,8 +27,6 @@ class python_game_characters():
             self.seconds=(pygame.time.get_ticks()-self.start_time)/1000
             self.timer_text=self.font_.render('Timer:-{0}'.format(self.seconds//1),1,(255,255,255))
             self.win.blit(self.timer_text,(600,600))
-            if self.seconds >= 20:
-                self.game_end_handler()
 
     def display_points(self):
         self.win.blit(self.points_text, (20,720))
@@ -78,6 +76,7 @@ class python_game_characters():
     def check_collision(self):
         bridge_counter=0
         river_counter=0
+        self.timer_implementation()
         for i in range(9):
             if i%2 == 0:
                 for j in range(5):
@@ -96,7 +95,8 @@ class python_game_characters():
             self.game_lost()
         if self.y <= 32:
             self.win_check()
-        self.timer_implementation()
+        if self.seconds >= 20:
+            self.game_lost()
         
 
     def move_boat(self):
@@ -146,6 +146,7 @@ class python_game_characters():
         self.timer_start=False
         self.end = False
         self.player_index=1
+        self.seconds=0
         pygame.init()
         self.win=pygame.display.set_mode((self.screen_width,self.screen_height))
         pygame.display.set_caption("River cross 1 v 1")
