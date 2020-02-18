@@ -1,5 +1,9 @@
 import pygame
 
+def score_list_function(num):
+    score_list[n-1] = num
+    return score_list
+
 class python_game_characters():
     def __init__(self, num=1):
         self.single_player=True
@@ -20,6 +24,14 @@ class python_game_characters():
         self.character_movements_animation()
         self.game_setup()
 
+    def final_result(self):
+        if score_list[0] > score_list[1]: 
+            winner = 1
+        else:
+            winner = 2
+        self.win_text=self.font_.render(('Player {0} wins'.format(winner)),1,(255,255,0))
+        self.win.blit(self.win_text, (550,600))
+
     def timer_implementation(self):
         if self.timer_start == False:
             self.start_time=pygame.time.get_ticks()
@@ -38,18 +50,24 @@ class python_game_characters():
         self.win.blit(self.reset_text, (200, 700))
         pygame.display.update()
         keys=pygame.key.get_pressed()
+        if self.player_number == 2:
+            self.final_result()
         if keys[pygame.K_r]:
-            main()
+            main(1)
         elif keys[pygame.K_q]:
             pygame.quit()
+        elif keys[pygame.K_n]:
+            n=2
+            main(2)
 
     def extra_descriptors(self):
-        self.font_ = pygame.font.SysFont('comicsans', 30, True, True)
-        player_text = self.font_.render(("Player {0}".format(self.player_index)),1,(0,0,255))
+        self.font_ = pygame.font.SysFont('comicsans', 20, True, True)
+        player_text = self.font_.render(("Player {0}".format(self.player_number)),1,(0,0,255))
         health_text = self.font_.render("Health:-",1,(255,255,255))
         self.lose_text=self.font_.render('You Have Lost!!!',1,(255,0,255))
         self.win_text=self.font_.render('You Have Won!!!',1,(255,0,255))
-        self.reset_text=self.font_.render('Press R to Play again and Q to quit',1,(255,0,0))
+        if n == 1:  self.reset_text=self.font_.render('Press R to Play again Q to quit and N for next player',1,(255,0,0))
+        elif n == 2: self.reset_text=self.font_.render('Press R to Play again Q to quit',1,(255,0,0))
         self.points_text=self.font_.render(('Points:-{0}'.format(self.points)),1,(255,255,0))
         self.win.blit(player_text, (20,600))
         self.win.blit(health_text, (20,640))
@@ -57,6 +75,7 @@ class python_game_characters():
         pygame.draw.rect(self.win, (255,255,0), (20,675,100,15),2)
 
     def win_check(self):
+        score_list_function(self.points)
         self.points=self.health*420-((self.seconds*69)//1)
         self.win.blit(self.win_text, (300,600))
         pygame.display.update()
@@ -64,6 +83,7 @@ class python_game_characters():
 
     def game_lost(self):
         self.points=0
+        score_list_function(self.points)
         self.win.blit(self.lose_text, (300,600))
         pygame.display.update()
         self.game_end_handler()
@@ -143,6 +163,7 @@ class python_game_characters():
                     self.win.blit((pygame.transform.rotate(pygame.image.load('./sprites/bridge.png'),90)),(self.bridge_width*i,(self.bridge_height*j)))
 
     def game_setup(self):
+        n=self.player_number
         self.timer_start=False
         self.end = False
         self.player_index=1
@@ -194,10 +215,12 @@ class python_game_characters():
 # ---------------------------------------------Python Game environment------------------------------------------------
 # ---------------------------------------------Driver Function------------------------------------------------
 
-def main():
-    
-    ob=python_game_characters()
-    ob.game_setup()
+def main(num):
+    global n
+    n = num
+    global score_list
+    if num == 1:    score_list=[None,None]
+    ob=python_game_characters(num)
 
 if __name__ == '__main__':
-    main()
+    main(1)
