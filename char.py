@@ -1,10 +1,8 @@
-
 import pygame
 
 class python_game_characters():
     def __init__(self, num=1):
         self.single_player=True
-        self.start_time=pygame.time.get_ticks()
         self.player_number=num
         self.health=100
         self.points=0
@@ -22,11 +20,22 @@ class python_game_characters():
         self.character_movements_animation()
         self.game_setup()
 
+    def timer_implementation(self):
+        if self.timer_start == False:
+            self.start_time=pygame.time.get_ticks()
+        else:
+            self.seconds=(pygame.time.get_ticks()-self.start_time)/1000
+            self.timer_text=self.font_.render('Timer:-{0}'.format(self.seconds//1),1,(255,255,255))
+            self.win.blit(self.timer_text,(600,600))
+            if self.seconds >= 20:
+                self.game_end_handler()
+
     def display_points(self):
         self.win.blit(self.points_text, (20,720))
 
     def game_end_handler(self):
         self.end = True
+        self.timer_start = False
         self.display_points()
         self.win.blit(self.reset_text, (200, 700))
         pygame.display.update()
@@ -50,7 +59,7 @@ class python_game_characters():
         pygame.draw.rect(self.win, (255,255,0), (20,675,100,15),2)
 
     def win_check(self):
-        self.points=self.health*69
+        self.points=self.health*69-((self.seconds*6.9)//1)
         self.win.blit(self.win_text, (300,600))
         pygame.display.update()
         self.game_end_handler()
@@ -69,9 +78,6 @@ class python_game_characters():
     def check_collision(self):
         bridge_counter=0
         river_counter=0
-        seconds=(pygame.time.get_ticks()-self.start_time)/1000
-        self.timer_text=self.font_.render('Timer:-{0}'.format(seconds//1),1,(255,255,255))
-        self.win.blit(self.timer_text,(600,600))
         for i in range(9):
             if i%2 == 0:
                 for j in range(5):
@@ -90,6 +96,8 @@ class python_game_characters():
             self.game_lost()
         if self.y <= 32:
             self.win_check()
+        self.timer_implementation()
+        
 
     def move_boat(self):
         boat_velocity = 2.5
@@ -121,6 +129,7 @@ class python_game_characters():
                 bridge_counter+=1
             else:
                 self.move_boat()
+
     def surroundings(self):
         self.river_height=self.bridge_height=64
         self.bridge_width=64
@@ -134,6 +143,7 @@ class python_game_characters():
                     self.win.blit((pygame.transform.rotate(pygame.image.load('./sprites/bridge.png'),90)),(self.bridge_width*i,(self.bridge_height*j)))
 
     def game_setup(self):
+        self.timer_start=False
         self.end = False
         self.player_index=1
         pygame.init()
@@ -167,10 +177,10 @@ class python_game_characters():
         self.walkcout=0
         self.idle_count=0
         if self.end == False:
-            if keys[pygame.K_LEFT] and self.x > self.velocity:                                                 self.x-=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=True
-            elif keys[pygame.K_RIGHT] and self.x < self.screen_width-self.width-self.velocity:                 self.x+=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=False
-            elif keys[pygame.K_UP] and self.y > self.velocity:                                                 self.y-=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
-            elif keys[pygame.K_DOWN] and self.y < self.screen_height*0.8-0.75*self.height:                     self.y+=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1
+            if keys[pygame.K_LEFT] and self.x > self.velocity:                                                 self.x-=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=True; self.timer_start=True
+            elif keys[pygame.K_RIGHT] and self.x < self.screen_width-self.width-self.velocity:                 self.x+=self.velocity; self.walkcount+=1; self.isWalk=True; self.idle_count=0; self.left=False; self.timer_start=True
+            elif keys[pygame.K_UP] and self.y > self.velocity:                                                 self.y-=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1; self.timer_start=True
+            elif keys[pygame.K_DOWN] and self.y < self.screen_height*0.8-0.75*self.height:                     self.y+=self.velocity; self.walkcount=0;  self.isWalk=False; self.idle_count+=1; self.timer_start=True
             else:                                                                                              self.walkcount=0; self.isWalk=False; self.idle_count+=1
         self.character_drawing()
 
