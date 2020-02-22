@@ -26,7 +26,7 @@ class python_game_characters():
         self.character_movements_animation()
         self.game_setup()
 
-    # In case of a 2 player game this method calculates the highest score and displays the winner
+    # case of a 2 player game this method calculates the highest score and displays the winner
     def final_result(self):
         if score_list[0] >= score_list[1]: 
             winner = 1
